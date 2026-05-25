@@ -1,4 +1,4 @@
-[gd_scene format=3 uid="uid://6gapyxubvmap"]
+[gd_scene format=3 uid="uid://dqrv0dvqy6cwr"]
 
 [ext_resource type="PackedScene" uid="uid://dn2q045ld2hc" path="res://player.tscn" id="1_063cd"]
 [ext_resource type="Script" uid="uid://bkwv75r4ok5hf" path="res://scripts/camara_cenital.gd" id="2_rl68h"]
@@ -91,7 +91,7 @@ debug_color = Color(0, 0, 0.69803923, 0.41960785)
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 7)
 
 [node name="player" parent="." unique_id=2103946557 instance=ExtResource("1_063cd")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.0913556, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 14.373863, 1.0913556, 0)
 collision_layer = 2
 
 [node name="CollisionShape3D2" type="CollisionShape3D" parent="player" unique_id=1537817476]

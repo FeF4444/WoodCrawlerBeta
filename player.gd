@@ -1,6 +1,20 @@
 extends CharacterBody3D
+# 1. Definimos la lista con todas las opciones para esa dirección
+const OPCIONES_ROOM_1 = [
+	"res://rooms/room1_este.tscn",
+	"res://rooms/room2_este.tscn",
+	"res://rooms/room3_este.tscn",
+	"res://rooms/room4_este.tscn",
+]
 
-# --- VARIABLES EXPORTADAS (Balanceo desde el Inspector) ---
+# 2. Creamos la variable que elegirá una al azar
+var room_1_este: String
+
+func _ready():
+	# pick_random() toma un elemento al azar de la lista
+	room_1_este = OPCIONES_ROOM_1.pick_random()
+	print("La habitación elegida es: ", room_1_este)
+	# --- VARIABLES EXPORTADAS (Balanceo desde el Inspector) ---
 @export_category("Movimiento")
 @export var velocidad: float = 6.0
 @export var aceleracion: float = 15.0
@@ -120,3 +134,20 @@ func ejecutar_ataque() -> void:
 	# 3. Apagar el hitbox inmediatamente para que no siga haciendo daño
 	hitbox_colision.disabled = true
 	esta_atacando = false
+
+
+@warning_ignore("unused_parameter")
+func _on_area_3d_body_entered(body: Node3D) -> void:
+	get_tree().change_scene_to_file(room_1_este)	
+
+
+func _on_salida_norte_body_entered(body: Node3D) -> void:
+		print("rl jugador paso por la puerta del norte")
+
+
+func _on_salida_este_body_entered(body: Node3D) -> void:
+		print("rl jugador paso por la puerta del estea")
+
+
+func _on_salida_sur_body_entered(body: Node3D) -> void:
+		print("rl jugador paso por la puerta del sur")
