@@ -1,10 +1,23 @@
 [gd_scene format=3 uid="uid://6gapyxubvmap"]
 
+[ext_resource type="Texture2D" uid="uid://cidlwgfrcoitd" path="res://texturas/roca.png" id="1_0n6in"]
+[ext_resource type="Texture2D" uid="uid://cgcigi4ti6lgl" path="res://texturas/suelo oscuro.png" id="1_2tidx"]
+[ext_resource type="Texture2D" uid="uid://b2ubuvg10hio0" path="res://texturas/arbol oscuro.png" id="3_68s4l"]
+[ext_resource type="Texture2D" uid="uid://bqox55rulf43k" path="res://texturas/arbusto oscuro.png" id="4_v0uyc"]
+[ext_resource type="Texture2D" uid="uid://do8dcawhtwr2i" path="res://texturas/tronco oscuro.png" id="5_uf7ni"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_0n6in"]
+size = Vector3(1.5105, 1, 1.0913086)
+
 [sub_resource type="BoxShape3D" id="BoxShape3D_063cd"]
 size = Vector3(20, 0.5, 20)
 
 [sub_resource type="BoxMesh" id="BoxMesh_yi60l"]
 size = Vector3(20, 0.5, 20)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_0n6in"]
+shading_mode = 0
+albedo_texture = ExtResource("1_2tidx")
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_rl68h"]
 size = Vector3(0.7523804, 4, 4.390442)
@@ -30,7 +43,25 @@ size = Vector3(1.5814819, 8.996948, 6.875519)
 [sub_resource type="BoxShape3D" id="BoxShape3D_54x8u"]
 size = Vector3(2, 10, 6)
 
+[sub_resource type="BoxShape3D" id="BoxShape3D_v0uyc"]
+size = Vector3(0.5437012, 3.150879, 0.1696167)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_qsnvw"]
+size = Vector3(0.96691895, 1, 0.76464844)
+
 [node name="CuartoBase" type="Node3D" unique_id=1650920571]
+
+[node name="Sprite3D" type="Sprite3D" parent="." unique_id=428850642]
+transform = Transform3D(0.293, 0, 0, 0, 0.293, 0, 0, 0, 0.293, 6.356991, 0.789, 7.2309847)
+billboard = 1
+texture = ExtResource("1_0n6in")
+
+[node name="StaticBody3D" type="StaticBody3D" parent="Sprite3D" unique_id=1563663332]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Sprite3D/StaticBody3D" unique_id=834058574]
+transform = Transform3D(7.55, 0, 0, 0, 7.55, 0, 0, 0, 7.55, 0.07513809, 0, -0.34468842)
+shape = SubResource("BoxShape3D_0n6in")
+debug_color = Color(0.96862745, 0, 0.46666667, 1)
 
 [node name="Suelo" type="StaticBody3D" parent="." unique_id=101496749]
 transform = Transform3D(1.5, 0, 0, 0, 1.5, 0, 0, 0, 1.5, 0, 0, 0)
@@ -40,6 +71,7 @@ shape = SubResource("BoxShape3D_063cd")
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="Suelo" unique_id=1362277622]
 mesh = SubResource("BoxMesh_yi60l")
+surface_material_override/0 = SubResource("StandardMaterial3D_0n6in")
 
 [node name="Barreras Este y Oeste" type="StaticBody3D" parent="." unique_id=1804191235]
 transform = Transform3D(1.5, 0, 0, 0, 1.5, 0, 0, 0, 1.5, 0, 0, 0)
@@ -119,3 +151,32 @@ debug_color = Color(14.107606, 0.00026284897, 8.193988, 1)
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 15.840755, 0, 0)
 shape = SubResource("BoxShape3D_54x8u")
 debug_color = Color(0, 0.6, 0, 0.41960785)
+
+[node name="Sprite3D2" type="Sprite3D" parent="." unique_id=401310085]
+transform = Transform3D(0.525, 0, 0, 0, 0.525, 0, 0, 0, 0.525, -7.215, 4.019, -9.755)
+billboard = 1
+texture = ExtResource("3_68s4l")
+
+[node name="StaticBody3D" type="StaticBody3D" parent="Sprite3D2" unique_id=781157620]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.66239357, 0, 0)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Sprite3D2/StaticBody3D" unique_id=1227838900]
+transform = Transform3D(6.644998, 0, 0, 0, 3.6599996, 0, 0, 0, 12.205993, -0.13546276, -2.471107, 5.0678368)
+shape = SubResource("BoxShape3D_v0uyc")
+
+[node name="Sprite3D3" type="Sprite3D" parent="." unique_id=583502715]
+transform = Transform3D(0.27, 0, 0, 0, 0.27, 0, 0, 0, 0.27, 7.5530405, 1.794002, -7.561431)
+billboard = 1
+texture = ExtResource("4_v0uyc")
+
+[node name="Sprite3D4" type="Sprite3D" parent="." unique_id=1705987584]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6.70487, 2.630021, 8.40255)
+billboard = 1
+texture = ExtResource("5_uf7ni")
+
+[node name="StaticBody3D" type="StaticBody3D" parent="Sprite3D4" unique_id=824132002]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 1.4828043)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Sprite3D4/StaticBody3D" unique_id=1332785832]
+transform = Transform3D(7.625, 0, 0, 0, 2.422, 0, 0, 0, 2.577, 0.12612152, 0, -0.3032503)
+shape = SubResource("BoxShape3D_qsnvw")
