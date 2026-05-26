@@ -1,7 +1,5 @@
 [gd_scene format=3 uid="uid://dqrv0dvqy6cwr"]
 
-[ext_resource type="PackedScene" uid="uid://dn2q045ld2hc" path="res://player.tscn" id="1_063cd"]
-[ext_resource type="Script" uid="uid://bkwv75r4ok5hf" path="res://scripts/camara_cenital.gd" id="2_rl68h"]
 [ext_resource type="Script" uid="uid://dp67fc0ucof2l" path="res://area_3d.gd" id="3_uvdcx"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_063cd"]
@@ -27,8 +25,6 @@ size = Vector3(13.974365, 4, 1)
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_wf7kc"]
 size = Vector3(2.9783173, 4, 1)
-
-[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_rl68h"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_3axhn"]
 size = Vector3(1.5814819, 3.558838, 6.875519)
@@ -90,18 +86,6 @@ debug_color = Color(0, 0, 0.69803923, 0.41960785)
 [node name="SpawnInicio" type="Marker3D" parent="." unique_id=604845425]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 7)
 
-[node name="player" parent="." unique_id=2103946557 instance=ExtResource("1_063cd")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 14.373863, 1.0913556, 0)
-collision_layer = 2
-
-[node name="CollisionShape3D2" type="CollisionShape3D" parent="player" unique_id=1537817476]
-shape = SubResource("CapsuleShape3D_rl68h")
-
-[node name="CamaraCenital" type="Camera3D" parent="." unique_id=715636239]
-transform = Transform3D(1, 0, 0, 0, 0.64278764, 0.76604444, 0, -0.76604444, 0.64278764, 0, 10, 0)
-script = ExtResource("2_rl68h")
-objetivo_ruta = NodePath("../player")
-
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="." unique_id=878164877]
 transform = Transform3D(-0.8660254, -0.43301278, 0.25, 0, 0.49999997, 0.86602545, -0.50000006, 0.75, -0.43301266, 0, 0, 0)
 shadow_enabled = true
@@ -149,8 +133,3 @@ script = ExtResource("3_uvdcx")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.29074097, 1.279419, 0.1794281)
 shape = SubResource("BoxShape3D_3axhn")
 debug_color = Color(14.525561, 0, 5.158506, 1)
-
-[connection signal="body_entered" from="salida oeste" to="player" method="_on_area_3d_body_entered"]
-[connection signal="body_entered" from="salida norte" to="player" method="_on_salida_norte_body_entered"]
-[connection signal="body_entered" from="salida este" to="player" method="_on_salida_este_body_entered"]
-[connection signal="body_entered" from="salida sur" to="player" method="_on_salida_sur_body_entered"]

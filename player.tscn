@@ -4,6 +4,8 @@
 
 [sub_resource type="CapsuleMesh" id="CapsuleMesh_onrkg"]
 
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_4flbx"]
+
 [sub_resource type="BoxShape3D" id="BoxShape3D_4flbx"]
 size = Vector3(1.5, 1, 1.5)
 
@@ -14,6 +16,7 @@ script = ExtResource("1_4flbx")
 mesh = SubResource("CapsuleMesh_onrkg")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=397591367]
+shape = SubResource("CapsuleShape3D_4flbx")
 
 [node name="HitboxAtaque" type="Area3D" parent="." unique_id=1588564302]
 

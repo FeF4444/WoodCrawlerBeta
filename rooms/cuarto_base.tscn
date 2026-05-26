@@ -1,9 +1,5 @@
 [gd_scene format=3 uid="uid://6gapyxubvmap"]
 
-[ext_resource type="PackedScene" uid="uid://dn2q045ld2hc" path="res://player.tscn" id="1_063cd"]
-[ext_resource type="Script" uid="uid://bkwv75r4ok5hf" path="res://scripts/camara_cenital.gd" id="2_rl68h"]
-[ext_resource type="Script" uid="uid://dp67fc0ucof2l" path="res://area_3d.gd" id="3_uvdcx"]
-
 [sub_resource type="BoxShape3D" id="BoxShape3D_063cd"]
 size = Vector3(20, 0.5, 20)
 
@@ -28,10 +24,11 @@ size = Vector3(13.974365, 4, 1)
 [sub_resource type="BoxShape3D" id="BoxShape3D_wf7kc"]
 size = Vector3(2.9783173, 4, 1)
 
-[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_rl68h"]
-
 [sub_resource type="BoxShape3D" id="BoxShape3D_3axhn"]
-size = Vector3(1.5814819, 3.558838, 6.875519)
+size = Vector3(1.5814819, 8.996948, 6.875519)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_54x8u"]
+size = Vector3(2, 10, 6)
 
 [node name="CuartoBase" type="Node3D" unique_id=1650920571]
 
@@ -46,7 +43,6 @@ mesh = SubResource("BoxMesh_yi60l")
 
 [node name="Barreras Este y Oeste" type="StaticBody3D" parent="." unique_id=1804191235]
 transform = Transform3D(1.5, 0, 0, 0, 1.5, 0, 0, 0, 1.5, 0, 0, 0)
-collision_mask = 0
 
 [node name="Barrera Oeste Arriba" type="CollisionShape3D" parent="Barreras Este y Oeste" unique_id=1188832375]
 transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, -10.875469, 2, -6.408264)
@@ -70,7 +66,6 @@ debug_color = Color(0.8544813, 1.0877549e-05, 0.5672306, 0.41960785)
 
 [node name="Barreras Sur y Norte" type="StaticBody3D" parent="." unique_id=425238928]
 transform = Transform3D(1.5, 0, 0, 0, 1.5, 0, 0, 0, 1.5, 0, 0, 0)
-collision_mask = 0
 
 [node name="Barrera Sur Cerrada" type="CollisionShape3D" parent="Barreras Sur y Norte" unique_id=830296253]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.809352, 2, 10.481017)
@@ -90,67 +85,37 @@ debug_color = Color(0, 0, 0.69803923, 0.41960785)
 [node name="SpawnInicio" type="Marker3D" parent="." unique_id=604845425]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 7)
 
-[node name="player" parent="." unique_id=2103946557 instance=ExtResource("1_063cd")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.0913556, 0)
-collision_layer = 2
-
-[node name="CollisionShape3D2" type="CollisionShape3D" parent="player" unique_id=1537817476]
-shape = SubResource("CapsuleShape3D_rl68h")
-
-[node name="CamaraCenital" type="Camera3D" parent="." unique_id=715636239]
-transform = Transform3D(1, 0, 0, 0, 0.64278764, 0.76604444, 0, -0.76604444, 0.64278764, 0, 10, 0)
-script = ExtResource("2_rl68h")
-objetivo_ruta = NodePath("../player")
-
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="." unique_id=878164877]
 transform = Transform3D(-0.8660254, -0.43301278, 0.25, 0, 0.49999997, 0.86602545, -0.50000006, 0.75, -0.43301266, 0, 0, 0)
 shadow_enabled = true
 
 [node name="salida oeste" type="Area3D" parent="." unique_id=1774156821]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -15.167498, 0, 0)
-collision_layer = 0
-collision_mask = 2
-script = ExtResource("3_uvdcx")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="salida oeste" unique_id=1474743372]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.29074097, 1.279419, 0.1794281)
 shape = SubResource("BoxShape3D_3axhn")
-debug_color = Color(14.525561, 0, 5.158506, 1)
+debug_color = Color(14.107606, 0.00026284897, 8.193988, 1)
 
 [node name="salida norte" type="Area3D" parent="." unique_id=1307528860]
-transform = Transform3D(-0.030276835, 0, -0.9995415, 0, 1, 0, 0.9995415, 0, -0.030276835, 8.571982, 0, -14.974794)
-collision_layer = 0
-collision_mask = 2
-script = ExtResource("3_uvdcx")
+transform = Transform3D(-0.030276839, 0, -0.9995415, 0, 1, 0, 0.9995415, 0, -0.030276839, 8.571982, 0, -14.974794)
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="salida norte" unique_id=1636376258]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.29074097, 1.279419, 0.1794281)
 shape = SubResource("BoxShape3D_3axhn")
-debug_color = Color(14.525561, 0, 5.158506, 1)
-
-[node name="salida este" type="Area3D" parent="." unique_id=1697577899]
-transform = Transform3D(0.99909705, 0, 0.042485982, 0, 1, 0, -0.042485982, 0, 0.99909705, 15.12672, 0, -1.1093988)
-collision_layer = 0
-collision_mask = 2
-script = ExtResource("3_uvdcx")
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="salida este" unique_id=358277636]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.29074097, 1.279419, 0.1794281)
-shape = SubResource("BoxShape3D_3axhn")
-debug_color = Color(14.525561, 0, 5.158506, 1)
+debug_color = Color(14.107606, 0.00026284897, 8.193988, 1)
 
 [node name="salida sur" type="Area3D" parent="." unique_id=1543306567]
-transform = Transform3D(-0.030276835, 0, -0.9995415, 0, 1, 0, 0.9995415, 0, -0.030276835, -9.679955, 0, 14.115269)
-collision_layer = 0
-collision_mask = 2
-script = ExtResource("3_uvdcx")
+transform = Transform3D(-0.030276839, 0, -0.9995415, 0, 1, 0, 0.9995415, 0, -0.030276839, -9.679955, 0, 14.115269)
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="salida sur" unique_id=459035579]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.29074097, 1.279419, 0.1794281)
 shape = SubResource("BoxShape3D_3axhn")
-debug_color = Color(14.525561, 0, 5.158506, 1)
+debug_color = Color(14.107606, 0.00026284897, 8.193988, 1)
 
-[connection signal="body_entered" from="salida oeste" to="player" method="_on_area_3d_body_entered"]
-[connection signal="body_entered" from="salida norte" to="player" method="_on_salida_norte_body_entered"]
-[connection signal="body_entered" from="salida este" to="player" method="_on_salida_este_body_entered"]
-[connection signal="body_entered" from="salida sur" to="player" method="_on_salida_sur_body_entered"]
+[node name="salida este" type="Area3D" parent="." unique_id=1762603522]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="salida este" unique_id=111395335]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 15.840755, 0, 0)
+shape = SubResource("BoxShape3D_54x8u")
+debug_color = Color(0, 0.6, 0, 0.41960785)
