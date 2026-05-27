@@ -114,9 +114,6 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 8.491361, 2, -10.49234)
 shape = SubResource("BoxShape3D_wf7kc")
 debug_color = Color(0, 0, 0.69803923, 0.41960785)
 
-[node name="SpawnInicio" type="Marker3D" parent="." unique_id=604845425]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 7)
-
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="." unique_id=878164877]
 transform = Transform3D(-0.8660254, -0.43301278, 0.25, 0, 0.49999997, 0.86602545, -0.50000006, 0.75, -0.43301266, 0, 0, 0)
 shadow_enabled = true
@@ -170,7 +167,7 @@ billboard = 1
 texture = ExtResource("4_v0uyc")
 
 [node name="Sprite3D4" type="Sprite3D" parent="." unique_id=1705987584]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6.70487, 2.630021, 8.40255)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6.70487, 2.630021, -0.09719181)
 billboard = 1
 texture = ExtResource("5_uf7ni")
 
