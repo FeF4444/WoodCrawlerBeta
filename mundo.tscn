@@ -3,6 +3,9 @@
 [ext_resource type="PackedScene" uid="uid://dn2q045ld2hc" path="res://player.tscn" id="1_6ba58"]
 [ext_resource type="Script" uid="uid://byafejop1j26p" path="res://mundo.gd" id="1_fw4w5"]
 [ext_resource type="Script" uid="uid://bkwv75r4ok5hf" path="res://scripts/camara_cenital.gd" id="2_lgngo"]
+[ext_resource type="AudioStream" uid="uid://dfxb7lxjvlvb2" path="res://sfx/grass  walker.wav" id="3_otwa2"]
+[ext_resource type="Script" uid="uid://3cla7qs5xny1" path="res://music_manager.gd" id="5_5ckkb"]
+[ext_resource type="AudioStream" uid="uid://htobd81b6hx1" path="res://sfx/forrst.ogg" id="6_2hh7m"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_xwo6f"]
 sky_horizon_color = Color(0.66224277, 0.6717428, 0.6867428, 1)
@@ -70,6 +73,13 @@ shape = SubResource("BoxShape3D_fw4w5")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.3413382, 0)
 collision_mask = 3
 
+[node name="SfxCaminar" type="AudioStreamPlayer" parent="player" unique_id=155018780]
+stream = ExtResource("3_otwa2")
+volume_db = -11.017
+
+[node name="SfxAcciones" type="AudioStreamPlayer" parent="player" unique_id=1800074644]
+volume_db = -12.81
+
 [node name="CamaraCenital" type="Camera3D" parent="." unique_id=1134603495]
 transform = Transform3D(1, 0, 0, 0, 0.64278764, 0.76604444, 0, -0.76604444, 0.64278764, 0, 10, 0)
 script = ExtResource("2_lgngo")
@@ -95,3 +105,12 @@ offset_right = 109.0
 offset_bottom = 56.0
 max_value = 3.0
 value = 3.0
+
+[node name="music manager" type="Node" parent="." unique_id=2011701424]
+script = ExtResource("5_5ckkb")
+
+[node name="Player2" type="AudioStreamPlayer" parent="music manager" unique_id=1198835935]
+stream = ExtResource("6_2hh7m")
+
+[node name="Player1" type="AudioStreamPlayer" parent="music manager" unique_id=49488802]
+stream = ExtResource("6_2hh7m")
