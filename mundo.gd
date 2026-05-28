@@ -1,6 +1,10 @@
 extends Node3D
 
+# --- NODOS ONREADY ---
 @onready var room_container: Node3D = $RoomContainer
+@onready var barra_vida: ProgressBar = $CanvasLayer/ProgressBar 
+@onready var barra_dash: ProgressBar = $CanvasLayer/ProgressBarDash # <-- CONFIGURADO COMO BARRA SIMPLE
+
 var jugador: CharacterBody3D = null
 
 # Historial de habitaciones visitadas
@@ -31,6 +35,13 @@ func _ready() -> void:
 	
 	if jugador == null:
 		print("ADVERTENCIA: No se encontró al jugador en la raíz de Mundo.")
+	
+	# CONEXIÓN DE SEÑALES: Vinculamos el jugador con la interfaz
+	if jugador:
+		if barra_vida:
+			jugador.vida_cambiada.connect(_on_jugador_vida_cambiada)
+		if barra_dash:
+			jugador.cargas_cambiadas.connect(_on_jugador_cargas_cambiadas)
 
 func cargar_habitacion(indice: int, puerta_aparicion: String) -> void:
 	indice_habitacion_actual = indice
@@ -144,6 +155,21 @@ func colocar_jugador_en_puerta(cuarto_nodo: Node, direccion_puerta: String) -> v
 		var posicion_final = pos_puerta + desfase
 		jugador.set_deferred("global_position", Vector3(posicion_final.x, 0.1, posicion_final.z))
 	else:
-		# Si vuelve a fallar la Oeste, este mensaje te dirá exactamente en qué habitación pasa
 		print("⚠️ ERR: No se encontró '" + nombre_puerta + "' en " + cuarto_nodo.name + ". Revisa el nombre en el editor.")
 		jugador.set_deferred("global_position", Vector3(0.0, 0.1, 0.0))
+
+# ESCUCHA DE VIDA: Lee tus variables del jugador y las dibuja en pantalla
+func _on_jugador_vida_cambiada() -> void:
+	if barra_vida and jugador:
+		barra_vida.max_value = jugador.vida_maxima
+		barra_vida.value = jugador.vida_actual
+
+# ESCUCHA DE DASHES: Muestra el texto simple "DASH: 3 / 3" arriba de la barra
+func _on_jugador_cargas_cambiadas(cargas_actuales: int, max_cargas: int) -> void:
+	if barra_dash:
+		barra_dash.max_value = max_cargas
+		barra_dash.value = cargas_actuales
+		
+		# Agregamos la propiedad para que pinte el texto plano con los números
+		if "text" in barra_dash:
+			barra_dash.text = "DASH: " + str(cargas_actuales) + " / " + str(max_cargas)

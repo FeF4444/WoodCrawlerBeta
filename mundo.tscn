@@ -26,6 +26,27 @@ size = Vector3(500, 0.5, 500)
 [sub_resource type="BoxShape3D" id="BoxShape3D_fw4w5"]
 size = Vector3(500, 1, 500)
 
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_fw4w5"]
+bg_color = Color(0.108742975, 0.1087447, 0.13272816, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.54509807, 0.4509804, 0.33333334, 1)
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_otwa2"]
+bg_color = Color(0.6, 0, 0.06666667, 1)
+corner_radius_top_left = 2
+corner_radius_top_right = 2
+corner_radius_bottom_right = 2
+corner_radius_bottom_left = 2
+shadow_color = Color(1, 0.13725491, 0.13725491, 1)
+shadow_size = 2
+
 [node name="Mundo" type="Node3D" unique_id=1137187403]
 script = ExtResource("1_fw4w5")
 
@@ -55,3 +76,22 @@ script = ExtResource("2_lgngo")
 objetivo_ruta = NodePath("../player")
 
 [node name="RoomContainer" type="Node3D" parent="." unique_id=709762807]
+
+[node name="CanvasLayer" type="CanvasLayer" parent="." unique_id=484552013]
+
+[node name="ProgressBar" type="ProgressBar" parent="CanvasLayer" unique_id=990676433]
+clip_contents = true
+custom_minimum_size = Vector2(200, 20)
+offset_right = 4.0
+offset_bottom = 27.0
+theme_override_styles/background = SubResource("StyleBoxFlat_fw4w5")
+theme_override_styles/fill = SubResource("StyleBoxFlat_otwa2")
+
+[node name="ProgressBarDash" type="ProgressBar" parent="CanvasLayer" unique_id=1327020914]
+texture_repeat = 1
+offset_left = 1.0
+offset_top = 29.0
+offset_right = 109.0
+offset_bottom = 56.0
+max_value = 3.0
+value = 3.0
