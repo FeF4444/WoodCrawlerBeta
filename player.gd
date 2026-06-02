@@ -21,6 +21,7 @@ signal cargas_cambiadas
 
 @export_category("Combate")
 @export var tiempo_ataque: float = 0.3
+@export var daño_ataque: float = 10.0
 
 # --- CARGA AUTOMÁTICA DE TUS ARCHIVOS .WAV DESDE LA CARPETA SFX ---
 var sonidos_ataque: Array[AudioStream] = [
@@ -39,7 +40,6 @@ var sonido_dash: AudioStream = load("res://sfx/roll2.wav")
 var sonido_muerte: AudioStream = load("res://sfx/muerte.wav")
 
 # --- NODOS ONREADY ---
-@onready var hitbox_colision: CollisionShape3D = $HitboxAtaque/CollisionShape3D
 @onready var sfx_caminar_player: AudioStreamPlayer = $SfxCaminar
 @onready var sfx_acciones_player: AudioStreamPlayer = $SfxAcciones
 
@@ -56,9 +56,10 @@ var tiempo_acumulado_recarga: float = 0.0
 func _ready() -> void:
 	vida_actual = vida_maxima
 	
-	if hitbox_colision:
-		hitbox_colision.disabled = true
-		
+	# Asegura de forma automática que el Player pertenezca al grupo correcto
+	# para que Mundo y el Caballero Fantasma puedan interactuar con él sin crasheos
+	add_to_group("jugador")
+	
 	await get_tree().process_frame
 	vida_cambiada.emit()
 	cargas_cambiadas.emit(cargas_actuales, max_cargas_rodar)
@@ -99,13 +100,13 @@ func procesar_movimiento(delta: float) -> void:
 	
 	if input_dir != Vector3.ZERO:
 		direccion_mirada = input_dir
+		
+		# ROTACIÓN DE LA CÁPSULA: Gira el cuerpo 3D suavemente hacia la dirección de la palanca/teclas
 		var angulo_objetivo = atan2(-input_dir.x, -input_dir.z)
 		rotation.y = lerp_angle(rotation.y, angulo_objetivo, delta * 15.0)
 		
-		# Activar sonido de caminar
 		reproducir_sfx_caminar(true)
 	else:
-		# Detener sonido de caminar
 		reproducir_sfx_caminar(false)
 	
 	move_and_slide()
@@ -135,7 +136,6 @@ func ejecutar_dash() -> void:
 	esta_esquivando = true
 	cargas_actuales -= 1 
 	
-	# Reproducir roll2.wav
 	if sonido_dash and sfx_acciones_player:
 		sfx_acciones_player.stream = sonido_dash
 		sfx_acciones_player.play()
@@ -159,20 +159,47 @@ func procesar_recarga_rodar(delta: float) -> void:
 
 func ejecutar_ataque() -> void:
 	esta_atacando = true
+	print("⚔️ [SISTEMA]: Input de ataque detectado.")
 	
-	# Selecciona al azar entre sfx, sfx2, sfx3 o sfx4
+	# REPRODUCCIÓN DINÁMICA DE AUDIO
 	if sfx_acciones_player:
 		var audios_validos = sonidos_ataque.filter(func(s): return s != null)
 		if audios_validos.size() > 0:
 			sfx_acciones_player.stream = audios_validos.pick_random()
 			sfx_acciones_player.play()
+
+	# 🔦 SISTEMA DE ATAQUE POR ESCÁNER DE RAYO (INFALIBLE)
+	# Esto calcula una línea recta hacia el frente de la cápsula para aplicar daño directo
+	var espacio_3d = get_world_3d().direct_space_state
+	var desde = global_position + Vector3(0, 0.5, 0) # Altura del pecho de la cápsula
+	var hacia = desde + (-transform.basis.z * 3.5)   # Escanea 3.5 metros al frente
 	
-	if hitbox_colision: hitbox_colision.disabled = false
+	var query = PhysicsRayQueryParameters3D.create(desde, hacia)
+	query.collide_with_bodies = true
+	
+	# Excluimos al propio jugador de su rayo para que no se autogolpee
+	query.exclude = [get_rid()] 
+	
+	var resultado = espacio_3d.intersect_ray(query)
+	
+	if resultado and resultado.has("collider"):
+		var victima = resultado["collider"]
+		print("🎯 [RAYCAST]: El ataque alcanzó físicamente a: ", victima.name)
+		
+		if victima.has_method("recibir_daño"):
+			victima.recibir_daño(daño_ataque)
+	else:
+		print("💨 [RAYCAST]: El ataque falló (no tocó ningún cuerpo).")
+
 	await get_tree().create_timer(tiempo_ataque).timeout
-	if hitbox_colision: hitbox_colision.disabled = true
 	esta_atacando = false
 
 func recibir_daño(cantidad: float) -> void:
+	# FRAME DE INMUNIDAD: Bloquea el daño si estás ejecutando el dash
+	if esta_esquivando:
+		print("🏃‍♂️ [PLAYER]: ¡Esquivado! Inmunidad por Dash activa.")
+		return
+		
 	vida_actual -= cantidad
 	vida_actual = clamp(vida_actual, 0.0, vida_maxima)
 	vida_cambiada.emit()
@@ -180,7 +207,6 @@ func recibir_daño(cantidad: float) -> void:
 	if vida_actual <= 0.0:
 		morir()
 	else:
-		# Selecciona al azar entre daño o daño2
 		if sfx_acciones_player:
 			var audios_validos = sonidos_daño.filter(func(s): return s != null)
 			if audios_validos.size() > 0:
@@ -189,8 +215,6 @@ func recibir_daño(cantidad: float) -> void:
 
 func morir() -> void:
 	reproducir_sfx_caminar(false)
-	
-	# Reproducir muerte.wav
 	if sonido_muerte and sfx_acciones_player:
 		sfx_acciones_player.stream = sonido_muerte
 		sfx_acciones_player.play()

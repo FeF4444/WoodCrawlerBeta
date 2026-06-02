@@ -1,5 +1,9 @@
 extends Node3D
 
+# --- PRECARGA DEL ENEMIGO ---
+# Preparamos al Caballero en memoria (Asegurate de que la ruta a tu escena sea idéntica)
+var escena_enemigo: PackedScene = preload("res://caballero_fantasma.tscn")
+
 # --- NODOS ONREADY ---
 @onready var room_container: Node3D = $RoomContainer
 @onready var barra_vida: ProgressBar = $CanvasLayer/ProgressBar 
@@ -41,7 +45,9 @@ func _ready() -> void:
 		if barra_vida:
 			jugador.vida_cambiada.connect(_on_jugador_vida_cambiada)
 		if barra_dash:
-			jugador.cargas_cambiadas.connect(_on_jugador_cargas_cambiadas)
+			# Nota: Asegurate que tu señal en Player.gd se llame "cargas_cambiadas" para que calce con esto
+			if jugador.has_signal("cargas_cambiadas"):
+				jugador.cargas_cambiadas.connect(_on_jugador_cargas_cambiadas)
 
 func cargar_habitacion(indice: int, puerta_aparicion: String) -> void:
 	indice_habitacion_actual = indice
@@ -65,6 +71,23 @@ func cargar_habitacion(indice: int, puerta_aparicion: String) -> void:
 		
 		if not puerta_aparicion.is_empty():
 			colocar_jugador_en_puerta(nueva_room, puerta_aparicion)
+			
+		# =========================================================================
+		# 🔥 SISTEMA DE SPAWN AUTOMÁTICO DE ENEMIGOS
+		# =========================================================================
+		# Buscamos de forma flexible el nodo contenedor adentro de la habitación cargada
+		var contenedor_spawns = nueva_room.find_child("SpawnersEnemigos", true, false)
+		if contenedor_spawns:
+			# Recorremos cada marcador Marker3D que pusieron en la sala
+			for marcador in contenedor_spawns.get_children():
+				if marcador is Marker3D:
+					# Instanciamos al Caballero Fantasma
+					var nuevo_enemigo = escena_enemigo.instantiate()
+					# Lo metemos adentro de la habitación actual del calabozo
+					nueva_room.add_child(nuevo_enemigo)
+					# Lo ubicamos en la posición exacta guardada en el editor
+					nuevo_enemigo.global_position = marcador.global_position
+					print("👻 [SPAWNER]: Caballero Fantasma aparecido en coordenadas: ", marcador.global_position)
 
 func conectar_puertas(cuarto_nodo: Node) -> void:
 	var direcciones = ["norte", "sur", "este", "oeste"]

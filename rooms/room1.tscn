@@ -137,3 +137,7 @@ texture = ExtResource("2_n2rm1")
 transform = Transform3D(7.55, 0, 0, 0, 7.55, 0, 0, 0, 7.55, 0.07513809, 0, -0.34468842)
 shape = SubResource("BoxShape3D_w4cg4")
 debug_color = Color(0.96862745, 0, 0.46666667, 1)
+
+[node name="SpawnersEnemigos" type="Node3D" parent="." unique_id=747263675]
+
+[node name="Spawn 1" type="Marker3D" parent="SpawnersEnemigos" unique_id=1238792012]
