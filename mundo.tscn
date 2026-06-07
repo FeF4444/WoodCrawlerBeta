@@ -4,26 +4,21 @@
 [ext_resource type="Script" uid="uid://byafejop1j26p" path="res://mundo.gd" id="1_fw4w5"]
 [ext_resource type="Script" uid="uid://bkwv75r4ok5hf" path="res://scripts/camara_cenital.gd" id="2_lgngo"]
 [ext_resource type="AudioStream" uid="uid://dfxb7lxjvlvb2" path="res://sfx/grass  walker.wav" id="3_otwa2"]
-[ext_resource type="Script" uid="uid://3cla7qs5xny1" path="res://music_manager.gd" id="5_5ckkb"]
-[ext_resource type="AudioStream" uid="uid://htobd81b6hx1" path="res://sfx/forrst.ogg" id="6_2hh7m"]
+[ext_resource type="AudioStream" uid="uid://dasdxbikwmt0s" path="res://sfx/gritote bien diabolicote.wav" id="4_5ckkb"]
+[ext_resource type="AudioStream" uid="uid://dqcjaqwdut3n8" path="res://sfx/cañon sfx.wav" id="5_2hh7m"]
+[ext_resource type="Texture2D" uid="uid://nbsmtnoba5pr" path="res://texturas/hud.png" id="5_aou4a"]
+[ext_resource type="Script" uid="uid://3cla7qs5xny1" path="res://music_manager.gd" id="8_pfhxm"]
+[ext_resource type="AudioStream" uid="uid://htobd81b6hx1" path="res://sfx/forrst.ogg" id="9_pij3u"]
 
-[sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_xwo6f"]
-sky_horizon_color = Color(0.66224277, 0.6717428, 0.6867428, 1)
-ground_horizon_color = Color(0.66224277, 0.6717428, 0.6867428, 1)
+[sub_resource type="Environment" id="Environment_5ckkb"]
+background_mode = 1
+ambient_light_source = 2
 
-[sub_resource type="Sky" id="Sky_6ba58"]
-sky_material = SubResource("ProceduralSkyMaterial_xwo6f")
-
-[sub_resource type="Environment" id="Environment_lgngo"]
-background_mode = 2
-sky = SubResource("Sky_6ba58")
-tonemap_mode = 2
-
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_fw4w5"]
-albedo_color = Color(0.39215687, 1, 0.14117648, 1)
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_5ckkb"]
+albedo_color = Color(0, 0, 0, 1)
 
 [sub_resource type="BoxMesh" id="BoxMesh_xwo6f"]
-material = SubResource("StandardMaterial3D_fw4w5")
+material = SubResource("StandardMaterial3D_5ckkb")
 size = Vector3(500, 0.5, 500)
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_fw4w5"]
@@ -53,13 +48,8 @@ shadow_size = 2
 [node name="Mundo" type="Node3D" unique_id=1137187403]
 script = ExtResource("1_fw4w5")
 
-[node name="DirectionalLight3D" type="DirectionalLight3D" parent="." unique_id=347382999]
-transform = Transform3D(-0.8660254, -0.43301278, 0.25, 0, 0.49999997, 0.86602545, -0.50000006, 0.75, -0.43301266, 0, 0, 0)
-light_energy = 0.083
-shadow_enabled = true
-
-[node name="WorldEnvironment" type="WorldEnvironment" parent="." unique_id=980695563]
-environment = SubResource("Environment_lgngo")
+[node name="WorldEnvironment" type="WorldEnvironment" parent="." unique_id=1816620870]
+environment = SubResource("Environment_5ckkb")
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="." unique_id=2136817656]
 mesh = SubResource("BoxMesh_xwo6f")
@@ -80,6 +70,14 @@ volume_db = -11.017
 [node name="SfxAcciones" type="AudioStreamPlayer" parent="player" unique_id=1800074644]
 volume_db = -12.81
 
+[node name="SfxUlti" type="AudioStreamPlayer" parent="player" unique_id=1018064552]
+stream = ExtResource("4_5ckkb")
+volume_db = -2.0
+
+[node name="SfxCañon" type="AudioStreamPlayer" parent="player" unique_id=1598090185]
+stream = ExtResource("5_2hh7m")
+volume_db = -10.0
+
 [node name="CamaraCenital" type="Camera3D" parent="." unique_id=1134603495]
 transform = Transform3D(1, 0, 0, 0, 0.64278764, 0.76604444, 0, -0.76604444, 0.64278764, 0, 10, 0)
 script = ExtResource("2_lgngo")
@@ -89,28 +87,56 @@ objetivo_ruta = NodePath("../player")
 
 [node name="CanvasLayer" type="CanvasLayer" parent="." unique_id=484552013]
 
-[node name="ProgressBar" type="ProgressBar" parent="CanvasLayer" unique_id=990676433]
+[node name="ProgressBarDash" type="ProgressBar" parent="CanvasLayer" unique_id=1327020914]
+modulate = Color(1, 1, 0, 1)
+show_behind_parent = true
+texture_repeat = 1
+offset_left = 323.0
+offset_top = 572.0
+offset_right = 417.0
+offset_bottom = 596.0
+max_value = 3.0
+value = 3.0
+show_percentage = false
+
+[node name="Sprite2D" type="Sprite2D" parent="CanvasLayer/ProgressBarDash" unique_id=1408317646]
+top_level = true
+position = Vector2(528.96405, 574)
+scale = Vector2(0.4062852, 0.216)
+texture = ExtResource("5_aou4a")
+
+[node name="ProgressBar" type="ProgressBar" parent="CanvasLayer/ProgressBarDash/Sprite2D" unique_id=990676433]
+self_modulate = Color(0.85880685, 4.7168137e-06, 1.1551381e-06, 1)
+show_behind_parent = true
+light_mask = 512
+visibility_layer = 512
 clip_contents = true
 custom_minimum_size = Vector2(200, 20)
-offset_right = 4.0
-offset_bottom = 27.0
+offset_left = -499.56055
+offset_top = -74.07398
+offset_right = -39.292725
+offset_bottom = -18.518318
 theme_override_styles/background = SubResource("StyleBoxFlat_fw4w5")
 theme_override_styles/fill = SubResource("StyleBoxFlat_otwa2")
 
-[node name="ProgressBarDash" type="ProgressBar" parent="CanvasLayer" unique_id=1327020914]
-texture_repeat = 1
-offset_left = 1.0
-offset_top = 29.0
-offset_right = 109.0
-offset_bottom = 56.0
-max_value = 3.0
-value = 3.0
+[node name="LabelMonedas" type="RichTextLabel" parent="CanvasLayer" unique_id=485529102]
+anchors_preset = -1
+anchor_right = 0.035
+anchor_bottom = 0.031000001
+offset_left = 330.0
+offset_top = 588.0
+offset_right = 323.68
+offset_bottom = 587.912
 
-[node name="music manager" type="Node" parent="." unique_id=2011701424]
-script = ExtResource("5_5ckkb")
+[node name="Node" type="Node" parent="." unique_id=1432941442]
+script = ExtResource("8_pfhxm")
 
-[node name="Player2" type="AudioStreamPlayer" parent="music manager" unique_id=1198835935]
-stream = ExtResource("6_2hh7m")
+[node name="Player1" type="AudioStreamPlayer" parent="Node" unique_id=338297481]
+stream = ExtResource("9_pij3u")
 
-[node name="Player1" type="AudioStreamPlayer" parent="music manager" unique_id=49488802]
-stream = ExtResource("6_2hh7m")
+[node name="Player2" type="AudioStreamPlayer" parent="Node" unique_id=1834548482]
+stream = ExtResource("9_pij3u")
+
+[node name="battle1" type="AudioStreamPlayer" parent="Node" unique_id=1313413560]
+
+[node name="battle2" type="AudioStreamPlayer" parent="Node" unique_id=1254636023]

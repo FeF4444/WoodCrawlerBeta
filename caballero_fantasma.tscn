@@ -9,11 +9,11 @@
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_5q7go"]
 
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_bigpn"]
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_dxom2"]
 albedo_color = Color(0, 0, 0, 1)
 
 [sub_resource type="CapsuleMesh" id="CapsuleMesh_usojj"]
-material = SubResource("StandardMaterial3D_bigpn")
+material = SubResource("StandardMaterial3D_dxom2")
 
 [sub_resource type="Animation" id="Animation_6x3eg"]
 length = 0.001
@@ -679,7 +679,7 @@ viewport_path = NodePath("SubViewport")
 size = Vector3(1, 1, 0.82910156)
 
 [node name="Caballero_fantasma" type="CharacterBody3D" unique_id=179019836]
-collision_layer = 2
+collision_layer = 3
 script = ExtResource("1_7n0i8")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=965453485]
@@ -688,7 +688,7 @@ shape = SubResource("CapsuleShape3D_5q7go")
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="." unique_id=1410155207]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.5, 0)
-visible = false
+layers = 0
 mesh = SubResource("CapsuleMesh_usojj")
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="." unique_id=434806839]
@@ -829,7 +829,8 @@ bones = ["Cadera", PackedFloat32Array(0, 0, 0, 0, 0, 0), "Cadera/Pecho", PackedF
 [node name="ProyectorCaballero" type="Sprite3D" parent="." unique_id=1259754276]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, 0)
 pixel_size = 0.002
-billboard = 2
+billboard = 1
+shaded = true
 texture = SubResource("ViewportTexture_dxom2")
 
 [node name="HitboxAtaque" type="Area3D" parent="." unique_id=1268241439]

@@ -1,9 +1,12 @@
 extends CharacterBody3D
 
+# 🔥 NUEVA SEÑAL: Avisa al mundo para cerrar las puertas de inmediato
+signal revelado
+
 @export_category("Estadísticas Base")
 @export var velocidad_persecucion: float = 3.5 
 @export var vida: float = 30.0
-@export var velocidad_huida: float = 4.5       
+@export var velocidad_huida: float = 4.5        
 @export var distancia_deteccion: float = 12.0
 @export var distancia_ataque: float = 2.5
 
@@ -29,21 +32,29 @@ var es_invulnerable: bool = true
 # Guarda el vector de dirección calculado al inicio del espadazo
 var direccion_embestida: Vector3 = Vector3.ZERO
 
+# Variable para controlar la fricción cuando el cañón lo empuja
+var velocidad_empuje: Vector3 = Vector3.ZERO
+
 func _ready() -> void:
 	var jugadores = get_tree().get_nodes_in_group("jugador")
 	if jugadores.size() > 0:
 		jugador = jugadores[0]
 		
 	cambiar_estado(Estados.ETEREO_PERSEGUIR)
+	
+	# 🔥 Como este enemigo es agresivo desde el inicio, gatilla el cierre de puertas de inmediato
+	revelado.emit()
 
 func _physics_process(delta: float) -> void:
-	# Si el fantasma ya murió, se corta toda la lógica física del cuadro
 	if estado_actual == Estados.MUERTO or jugador == null: return
 	
 	if not is_on_floor(): velocity += get_gravity() * delta
 	else: velocity.y = 0.0
 		
 	var distancia = global_position.distance_to(jugador.global_position)
+
+	# Reducir gradualmente la fuerza del empuje (fricción) si fue golpeado por el cañón
+	velocidad_empuje = velocidad_empuje.move_toward(Vector3.ZERO, 30.0 * delta)
 
 	match estado_actual:
 		Estados.ETEREO_PERSEGUIR:
@@ -58,7 +69,6 @@ func _physics_process(delta: float) -> void:
 				cambiar_estado(Estados.SOLIDO_ATACAR)
 				
 		Estados.SOLIDO_ATACAR:
-			# Se desliza físicamente usando la velocidad de embestida multiplicada por su fuerza
 			velocity.x = move_toward(velocity.x, direccion_embestida.x * fuerza_embestida_ataque, 10.0 * delta)
 			velocity.z = move_toward(velocity.z, direccion_embestida.z * fuerza_embestida_ataque, 10.0 * delta)
 			
@@ -66,7 +76,6 @@ func _physics_process(delta: float) -> void:
 				_on_ataque_terminado()
 				
 		Estados.SOLIDO_RECUPERACION:
-			# Freno total para quedarse vulnerable tras fallar o conectar el golpe
 			velocity.x = move_toward(velocity.x, 0.0, 15.0 * delta)
 			velocity.z = move_toward(velocity.z, 0.0, 15.0 * delta)
 			cronometro_vulnerable += delta
@@ -83,6 +92,8 @@ func _physics_process(delta: float) -> void:
 				cronometro_etereo = tiempo_espera_etereo
 				cambiar_estado(Estados.ETEREO_PERSEGUIR)
 				
+	velocity += velocidad_empuje
+	
 	move_and_slide()
 	ajustar_flip_visual()
 
@@ -97,7 +108,6 @@ func cambiar_estado(nuevo_estado: Estados) -> void:
 			es_invulnerable = false
 			if proyector: proyector.modulate.a = 1.0
 			
-			# Calcula y fija el vector de trayectoria directo hacia el player
 			if jugador:
 				direccion_embestida = (jugador.global_position - global_position).normalized()
 				direccion_embestida.y = 0.0
@@ -120,13 +130,12 @@ func cambiar_estado(nuevo_estado: Estados) -> void:
 		Estados.MUERTO:
 			es_invulnerable = true
 			velocity = Vector3.ZERO 
+			velocidad_empuje = Vector3.ZERO
 			
-			# Desactiva las colisiones físicas de su cápsula/cuerpo principal
 			for hijo in get_children():
 				if hijo is CollisionShape3D:
 					hijo.set_deferred("disabled", true)
 			
-			# Desactiva los CollisionShape de su área de daño ofensiva por seguridad
 			var hitbox_malandra = find_child("HitboxAtaque", true, false)
 			if hitbox_malandra:
 				for col in hitbox_malandra.get_children():
@@ -134,7 +143,6 @@ func cambiar_estado(nuevo_estado: Estados) -> void:
 					
 			reproducir_animacion("muerte")
 			
-			# Temporizador forzado: el enemigo se borra de la escena de forma garantizada
 			await get_tree().create_timer(1.2).timeout
 			print("💀 [SISTEMA]: Caballero Fantasma purgado de la memoria con éxito.")
 			queue_free()
@@ -150,14 +158,23 @@ func ajustar_flip_visual() -> void:
 	var es_izquierda = transform.basis.z.cross(direccion_al_jugador).y > 0
 	proyector.flip_h = es_izquierda
 
-func recibir_daño(cantidad: float) -> void:
-	if es_invulnerable:
+func recibir_daño(cantidad: float, es_ataque_pesado: bool = false) -> void:
+	if es_invulnerable and not es_ataque_pesado:
 		print("🛡️ ¡El caballero es etéreo! El ataque lo atraviesa.")
 		return
+		
+	if es_invulnerable and es_ataque_pesado:
+		print("🔮 ¡El Cañón es demasiado fuerte! Rompe el estado etéreo del fantasma.")
+		cambiar_estado(Estados.SOLIDO_RECUPERACION) 
+		
 	vida -= cantidad
 	print("💥 ¡IMPACTO! Vida restante del enemigo: ", vida)
 	if vida <= 0.0:
 		cambiar_estado(Estados.MUERTO)
+
+func aplicar_empuje(fuerza_vector: Vector3) -> void:
+	if estado_actual == Estados.MUERTO: return
+	velocidad_empuje = fuerza_vector
 
 func _on_ataque_terminado() -> void:
 	if estado_actual == Estados.SOLIDO_ATACAR:
